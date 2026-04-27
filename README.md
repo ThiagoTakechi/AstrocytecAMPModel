@@ -1,7 +1,24 @@
-# Astrocyte cAMP Model
-This repository contains the source code for simulating the astrocyte compartmental model described in: 
+# Norepinephrine–dopamine sequential integration in astroglia drives behavioral state transitions 
 
-**Sijia Wang, Shilin Fang, Thiago O. Bezerra, Zhiyuan Wang, Qimeng Zhao, Xiaoou Wang, Liang Wang, Kui Wang, Lijun Chen, Funing Li, Yuchen Gong, Sha Li, Jiesi Feng, Yu Zheng, Yulong Li, Jun Chu, Gerald M. Pao, Antonio C. Roque, Xufei Du, Yu Mu (xxxx). Norepinephrine–dopamine sequential integration in astroglia drives behavioral state transitions.** (DOI: )
+Sijia Wang<sup>1,2†</sup>, Shilin Fang<sup>1†</sup>, Thiago O. Bezerra<sup>3†</sup>, Zhiyuan Wang<sup>1,2</sup>, Qimeng Zhao<sup>1,2</sup>, Xiaoou Wang<sup>1,2</sup>, Liang Wang<sup>4</sup>, Kui Wang<sup>1</sup>, Lijun Chen<sup>1,2</sup>, Funing Li<sup>1</sup>, Yuchen Gong<sup>1,2</sup>, Sha Li<sup>1,2</sup>, Jiesi Feng<sup>5</sup>, Yu Zheng<sup>5</sup>, Yulong Li<sup>5</sup>, Jun Chu<sup>4</sup>, Gerald M. Pao<sup>6</sup>, Antonio C. Roque<sup>3</sup>, Xufei Du<sup>1,2</sup>, Yu Mu<sup>1,2*</sup>
+
+Affiliations:
+
+<sup>1</sup> Institute of Neuroscience, State Key Laboratory of Brain Cognition and Brain-inspired Intelligence Technology, Center for Excellence in Brain Science and Intelligence Technology, Chinese Academy of Sciences, 320 Yue-Yang Road, Shanghai 200031, China.
+
+<sup>2</sup> University of Chinese Academy of Sciences,19A Yu-Quan Road, Beijing 100049, China.
+
+<sup>3</sup> Department of Physics, School of Philosophy, Sciences and Letters of Ribeirão Preto, University of São Paulo, Ribeirão Preto, São Paulo, Brazil.
+
+<sup>4</sup> Research Center for Primate Neuromodulation and Neuroimaging, Shenzhen Institutes of Advanced Technology, Chinese Academy of Sciences, Shenzhen 518055, China.
+
+<sup>5</sup> Academy for Advanced Interdisciplinary Studies, School of Psychological and Cognitive Sciences, Peking University, Beijing 100871, China.
+
+<sup>6</sup> Okinawa Institute of Science and Technology Graduate University, Biological Nonlinear Dynamics Data Science Unit, Okinawa 904-0495, Japan.
+
+†These authors contributed equally to this work.
+
+*Corresponding author. Email: my@ion.ac.cn
 
 The astrocyte cAMP model was implemented in C++. The codes are organized in four source files — `Astrocyte.cpp`, `Simulator.cpp`, `StimuliGenerator.cpp`, and `RunModel.cpp` and the corresponding header files (`Astrocyte.h`, `Simulator.h`, and `StimuliGenerator.h`).
 
