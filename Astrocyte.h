@@ -1,34 +1,38 @@
 /*
- * Norepinephrine–dopamine sequential integration in astroglia drives behavioral state 
- * transitions 
+ * Astroglia integrate sequential norepinephrine-dopamine signals to drive behavioral
+ * state transitions
  *
- * Sijia Wang1,2†, Shilin Fang1†, Thiago O. Bezerra3†, Zhiyuan Wang1,2, Qimeng Zhao1,2, 
- * Xiaoou Wang1,2, Liang Wang4, Kui Wang1, Lijun Chen1,2, Funing Li1, Yuchen Gong1,2, 
- * Yongxin Yang1,2, Jiesi Feng5, Yu Zheng5, Yulong Li5, Jun Chu4, Gerald M. Pao6, Xufei 
- * Du1,2, Jiu-lin Du1,2, Antonio C. Roque3, Yu Mu1,2*
- * 
+ * Sijia Wang1,2†, Shilin Fang1†, Thiago O. Bezerra3†, Zhiyuan Wang1,2, Xiaoou Wang1,2,
+ * Liang Wang4, Kui Wang1, Lijun Chen1,2, Funing Li1, Yuchen Gong1,2, Yongxin Yang1,2,
+ * Jiesi Feng5, Yu Zheng5, Yulong Li5, Jun Chu6, Gerald M. Pao7, Xu-fei Du1,2, Jiu-lin Du1,2 ,
+ * Antonio C. Roque3* , Yu Mu1,2*
+ *
+ *
+ *
  * Affiliations:
- * 
- * 1 Institute of Neuroscience, State Key Laboratory of Brain Cognition and Brain-inspired 
- * Intelligence Technology, Center for Excellence in Brain Science and Intelligence Technology, 
- * Chinese Academy of Sciences, 320 Yue-Yang Road, Shanghai 200031, China.
- * 
- * 2 University of Chinese Academy of Sciences,19A Yu-Quan Road, Beijing 100049, China.
  *
- * 3 Department of Physics, School of Philosophy, Sciences and Letters of Ribeirão Preto, 
- * University of São Paulo, Ribeirão Preto, São Paulo, Brazil.
+ * 1 Institute of Neuroscience, State Key Laboratory of Brain Cognition and Brain-inspired Intelligence Technology,
+ * Center for Excellence in Brain Science and Intelligence Technology, Chinese Academy of Sciences, 320
+ * Yue-Yang Road, Shanghai 200031, China.
  *
- * 4 Research Center for Primate Neuromodulation and Neuroimaging, Shenzhen Institutes of 
- * Advanced Technology, Chinese Academy of Sciences, Shenzhen 518055, China.
+ * 2 University of Chinese Academy of Sciences, 19A Yu-Quan Road, Beijing 100049, China.
  *
- * 5 Academy for Advanced Interdisciplinary Studies, School of Psychological and Cognitive 
- * Sciences, Peking University, Beijing 100871, China.
+ * 3 Department of Physics, School of Philosophy, Sciences and Letters of Ribeirão Preto, University of São Paulo,
+ * Ribeirão Preto, São Paulo, Brazil.
  *
- * 6 Okinawa Institute of Science and Technology Graduate University, Biological Nonlinear 
- * Dynamics Data Science Unit, Okinawa 904-0495, Japan.
+ * 4 Faculty of Biomedical Engineering, Shenzhen University of Advanced Technology, Shenzhen, 518055, China.
  *
- * † These authors contributed equally to this work.
- * * Corresponding author. Email: my@ion.ac.cn
+ * 5 State Key Laboratory of Membrane Biology, Peking University School of Life Sciences, Beijing 100871, China.
+ *
+ * 6 Research Center for Primate Neuromodulation and Neuroimaging, Shenzhen Institutes of Advanced Technology,
+ * Chinese Academy of Sciences, Shenzhen 518055, China.
+ *
+ * 7 Okinawa Institute of Science and Technology Graduate University, Biological Nonlinear Dynamics Data Science
+ * Unit, Okinawa 904-0495, Japan.
+ *
+ *
+ * †These authors contributed equally to this work.
+ * *Corresponding author. Email: my@ion.ac.cn / antonior@usp.br
  *
  * This header defines the Astrocyte class used to build the astrocyte model.
  */
@@ -82,6 +86,8 @@ class Astrocyte{
         std::vector<double> R2C2cAMP2;
         std::vector<double> R2C2cAMP4;
         std::vector<double> PKA;
+        std::vector<double> PDE4;
+        std::vector<double> PDE4A;
 
         std::vector<int> c_signal;
         bool trigger_c_signal = false;
@@ -105,91 +111,92 @@ class Astrocyte{
 
 
         // Resting State
-        double Ca_irest  = 0.000069; //0.000076154701; // 7.3e-5;         // mmole/m**3
+        double Ca_irest  = 0.000069;       // mmole/m**3
         double Ca_ERrest = 2.335e-2;       // mmole/m**3
         double Ca_orest  = 1.8;            // mmole/m**3
         double Na_irest  = 15;             // mmole/m**3
         double Na_orest  = 145;            // mmole/m**3
         double K_irest   = 100;            // mmole/m**3
         double K_orest   = 3;              // mmole/m**3
-        double IP3_rest  = 0; //0.000072893852; // 1.917e-4;//  //       // mmole/m**3
+        double IP3_rest  = 0;              // mmole/m**3
         double h_rest    = 0.8029;         // 1
         double v_rest    = -85e-3;         // volt
         double NErest    = 0;              // mmole/m**3
-        double DArest    = 10e-3;              // mmole/m**3
+        double DArest    = 10e-3;          // mmole/m**3
 
-        double AC_rest         = 2.3419;     // mmole/m**3
-        double AC_Gas_rest     = 2.2061e-5;  // mmole/m**3
-        double D1R_rest        = 0.0618;     // mmole/m**3
-        double D1R_DA_rest     = 0.0002;     // mmole/m**3
-        double D1R_DA_Gas_rest = 3.7435e-5;  // mmole/m**3
-        double Gas_rest        = 0.0073;     // mmole/m**3
-        double GasA_rest       = 7.4871e-5;  // mmole/m**3
-        double AC_Gas_ATP_rest = 0.0031569501355620277; //0.021638612477221916; //0.0031569501355620277;     // mmole/m**3
-        double cAMP_rest = 0.2; //2.916052584608045; //0.2;      // mmole/m**3
-        double R2C2_rest       = 3.590;      // mmole/m**3
-        double R2C2cAMP2_rest  = 0.100;      // mmole/m**3
-        double R2C2cAMP4_rest  = 0.0049;     // mmole/m**3
-        double PKA_rest = 0.031989; //0.056723480558; //0.06;  // //        // mmole/m**3
+        double AC_rest         = 2.342;     // mmole/m**3
+        double AC_Gas_rest     = 2.206e-5;  // mmole/m**3
+        double D1R_rest        = 0.618e-1;  // mmole/m**3
+        double D1R_DA_rest     = 0.206e-3;  // mmole/m**3
+        double D1R_DA_Gas_rest = 3.743e-05; // mmole/m**3
+        double Gas_rest        = 0.728e-2;  // mmole/m**3
+        double GasA_rest       = 7.487e-05; // mmole/m**3
+        double AC_Gas_ATP_rest = 1.867e-14; // mmole/m**3
+        double cAMP_rest       = 0;         // mmole/m**3
+        double R2C2_rest       = 3.590;     // mmole/m**3
+        double R2C2cAMP2_rest  = 0;         // mmole/m**3
+        double R2C2cAMP4_rest  = 0;         // mmole/m**3
+        double PKA_rest        = 0;         // mmole/m**3
+        double PDE4_rest       = 1; 
+        double PDE4A_rest      = 0; 
 
 
         // IP3 Dynamics
         // PLC B Inhibition
-        double K_p  = 10e-3*4.60937681482448;            // mmole/m**3
-        double K_pi = 0.6e-3;           // mmole/m**3
-        double K_R = 1.3e-3*4.60937681482448;     // mmole/m**3
-        double v_beta = 8e-05; //2.5e-5*2;   // mmole/m**3 * s
+        double K_p  = 0.461e-1; // mmole/m**3
+        double K_pi = 0.6e-3;   // mmole/m**3
+        double K_R = 0.599e-2;  // mM
+        double v_beta = 8e-05;  // mM * s
         double alpha = 0.7;
 
-        double v_DA = 0; //2.5e-5;     // mmole/m**3 * s
-        double K_DA = 5e-3* 40.53419055237087;       // mmole/m**3 * s
-		double K_pDA = 10e-3 * 40.53419055237087;
-        //double K_pDA = 10e-3 * 40.53419055237087;
+        double v_DA = 0;      // mM * s
+        double K_DA = 0.203;  // mM * s
+        double K_pDA = 0.405; // mM * s
 
         double beta = 0.5;
 
         // IP3 PLC Delta Synthesis
-        double v_delta     = 0.025e-3;  // mmole/m**3 * s
-        double kappa_delta = 1.5e-3;    // mmole/m**3
-        double K_PLCdelta  = 0.1e-3;    // mmole/m**3
+        double v_delta = 0.025e-3;  // mM * s
+        double kappa_delta = 1.5e-3;    // mM
+        double K_PLCdelta = 0.1e-3;    // mM
 
         // IP3-3K Degradation
-        double v_3K        = 2e-3;      // mmole/m**3 / s
-        double K_D         = 0.7e-3;    // mmole/m**3
-        double K_3         = 1e-3;      // mmole/m**3
+        double v_3K = 2e-3;      // mM / s
+        double K_D = 0.7e-3;    // mM
+        double K_3 = 1e-3;      // mM
 
         // IP-5P Degradation
-        double r_5P    = 0.45; //0.04;      // 1/s
+        double r_5P = 0.45;            // 1/s
 
         // Ca ER Leak Current
-        double r_L  = 0.11;             // 1/s
+        double r_L = 0.11;             // 1/s
 
 
         // SERCA Current
-        double v_ER = 0.008; //11.93e-3;         // mmole/m**3 * s
-        double K_ER = 0.1e-3;           // mmole/m**3
+        double v_ER = 0.008;            // mM * s
+        double K_ER = 0.1e-3;           // mM
 
 
         // h Dynamics
-        double d_1 = 0.13e-3;           // mmole/m**3
-        double d_5 = 0.10351e-3; //0.08234e-3;        // mmole/m**3
-        double d_2 = 1.049e-3;          // mmole/m**3
-        double d_3 = 0.9434e-3;         // mmole/m**3
+        double d_1 = 0.13e-3;           // mM
+        double d_5 = 0.10351e-3;        // mM
+        double d_2 = 1.049e-3;          // mM
+        double d_3 = 0.9434e-3;         // mM
         double a_2 = 0.2;               // m**3/(mmole * s)
         double r_C_max = 5;                 // 1/s
         double r_C_min = 5;                 // 1/s
 
-        double k_PKA = 1;
+        double k_PKA = 5e-7;
 
         // NKA
         double I_NKAmax = 1.52;         // amp / metre ** 2
-        double K_NKAmN = 10;            // mmole/m**3
-        double K_NKAmK = 1.5;           // mmole/m**3
+        double K_NKAmN = 10;            // mM
+        double K_NKAmK = 1.5;           // mM
 
         // NCX
         double I_NCXmax = 0.0001;       // amp/metre**2
-        double K_NCXmN = 87.5;          // mmole/m**3
-        double K_NCXmC = 1.380;         // mmole/m**3
+        double K_NCXmN = 87.5;          // mM
+        double K_NCXmC = 1.380;         // mM
         double k_sat = 0.1;             // 1
         double eta = 0.35;              // 1
 
@@ -200,50 +207,69 @@ class Astrocyte{
 
         // Leakage Currents
         double g_Naleak = 13.482807180178595;     // S/m**2
-        double E_Na     = 61e-3;         // V
-        double g_Kleak  = 145.81406273541853;    // S/m**2
-        double E_K      = -94e-3;        // V
+        double E_Na = 61e-3;         // V
+        double g_Kleak = 145.81406273541853;    // S/m**2
+        double E_K = -94e-3;        // V
 
-         
+
         // cAMP-PKA Pathway
-        double k1_ACGas = 38.5;
-        double k2_ACGas = 50;
-        double k3_ACGas = 0.128;
-        double ATP = 2000;
-        double k1_GasA = 20;
-        double k2_GasA = 10;
-        double k1_D1R_DA_Gas = 89.17;
-        double k2_D1R_DA_Gas = 0.001;
-        double k3_D1R_DA_Gas = 20;
+        double k1_ACGas = 38.5;  // 1/uMs
+        double k2_ACGas = 50;    // 1/s
+        double k3_ACGas = 0.128; // 1/uMs
+        double k4_ACGas = 56.92; // 1/s
+        double ATP = 2000;       // uM
 
-        double k1_Gas = 10;
-        double k2_Gas = 89.17;
+        double k1_GasA = 20;  // 1/s
+        double k2_GasA = 10;  // 1/s
 
-        double k1_D1R_DA = 3.33;
-        double k2_D1R_DA = 10;
+        double k1_D1R_DA_Gas = 10;     // 1/uMs
+        double k2_D1R_DA_Gas = 0.001;  // 1/s
+        double k3_D1R_DA_Gas = 20;     // 1/s
 
-        double k1_AC_Gas_ATP = 0.128; 
-        double k2_AC_Gas_ATP = 0.261;
+        double k1_Gas = 10;            // 1/s
+        double k2_Gas = 10;            // 1/uMs
 
-        double k1_cAMP = 14.23;
-        double k2_cAMP = 0.259;
-        double V_PDE = 15; //8.25;
-        double kcat = 39.7;
+        double k1_D1R_DA = 3.33;       // 1/uMs
+        double k2_D1R_DA = 10;         // 1/s
+        double k3_D1R_DA = 10;         // 1/s
 
-        double k1_R2C2 = 0.035;
-        double k2_R2C2 = 0.06;
+        double k1_AC_Gas_ATP = 0.128;  // 1/uMs
+        double k2_AC_Gas_ATP = 56.92;  // 1/s
+        double k3_AC_Gas_ATP = 0.259;  // 1/uMs
 
-        double k1_R2C2cAMP2 = 0.035;
-        double k2_R2C2cAMP2 = 0.28;
-        double k3_R2C2cAMP2 = 0.27;
+        double k1_cAMP = 56.92;      // 1/s
+        double k2_cAMP = 0.259;      // 1/uMs
+        double kf_R2C2 = 0.035;      // 1/uM2 s
+        double kf_R2C2cAMP2 = 0.27;  // 1/uM2 s
+        double kb_R2C2 = 0.06;       // 1/s
+        double kb_R2C2cAMP4 = 0.28;  // 1/s
 
-        double k1_R2C2cAMP4 = 0.27;
-        double k2_R2C2cAMP4 = 0.28;
-        double k3_R2C2cAMP4 = 0.085*20;
+        double V_PDE = 8.25;         // uM/s
+        double kcat = 10;            // uM
 
-        double R2cAMP4 = 0.69;
-        double k1_PKA = 3; //0.05;  // x2
-        double k2_PKA = 3; //0.085; // x2
+        double V_PDE4 = 5;           // 1/s
+        double kcat4 = 5e-5;         // 1
+        double kcat5 = 0.3;          // uM
+
+        double k1_R2C2 = 0.035;      // 1/uM2 s
+        double k2_R2C2 = 0.06;       // 1/s
+
+        double k1_R2C2cAMP2 = 0.035; // 1/uM2 s
+        double k2_R2C2cAMP2 = 0.28;  // 1/s 
+        double k3_R2C2cAMP2 = 0.27;  // 1/uM2 s
+
+        double k1_R2C2cAMP4 = 0.27; // 1/uM2 s
+        double k2_R2C2cAMP4 = 0.28; // 1/s
+        double R2cAMP4 = 0.69;      // uM
+
+        double k1_PKA = 1;        // 1/s
+        double k2_PKA = 1;        // 1/uM2 s
+        double k_pep = 0;         // 1/s
+        double k_dgr = 0.25;      // 1/s
+        double k_degr = 0.1;      // 1/uM
+
+        double k1_PDE4A = 11;     // 1/uM s
+        double k2_PDE4A = 0.01;   // 1/s
         
         
         // Diffusion Constants
@@ -319,6 +345,7 @@ class Astrocyte{
         double dR2C2cAMP2dt(int i_c);
         double dR2C2cAMP4dt(int i_c);
         double dPKAdt(int i_c);
+        double dPDE4Adt(int i_c);
 
         void UpdateVariables(double dt);
 

@@ -1,35 +1,38 @@
 /*
- * Norepinephrine–dopamine sequential integration in astroglia drives behavioral state 
- * transitions 
+ * Astroglia integrate sequential norepinephrine-dopamine signals to drive behavioral
+ * state transitions
  *
- * Sijia Wang1,2†, Shilin Fang1†, Thiago O. Bezerra3†, Zhiyuan Wang1,2, Qimeng Zhao1,2, 
- * Xiaoou Wang1,2, Liang Wang4, Kui Wang1, Lijun Chen1,2, Funing Li1, Yuchen Gong1,2, 
- * Yongxin Yang1,2, Jiesi Feng5, Yu Zheng5, Yulong Li5, Jun Chu4, Gerald M. Pao6, Xufei 
- * Du1,2, Jiu-lin Du1,2, Antonio C. Roque3, Yu Mu1,2*
+ * Sijia Wang1,2†, Shilin Fang1†, Thiago O. Bezerra3†, Zhiyuan Wang1,2, Xiaoou Wang1,2,
+ * Liang Wang4, Kui Wang1, Lijun Chen1,2, Funing Li1, Yuchen Gong1,2, Yongxin Yang1,2,
+ * Jiesi Feng5, Yu Zheng5, Yulong Li5, Jun Chu6, Gerald M. Pao7, Xu-fei Du1,2, Jiu-lin Du1,2 ,
+ * Antonio C. Roque3* , Yu Mu1,2*
+ * 
+ *
  * 
  * Affiliations:
  * 
- * 1 Institute of Neuroscience, State Key Laboratory of Brain Cognition and Brain-inspired 
- * Intelligence Technology, Center for Excellence in Brain Science and Intelligence Technology, 
- * Chinese Academy of Sciences, 320 Yue-Yang Road, Shanghai 200031, China.
+ * 1 Institute of Neuroscience, State Key Laboratory of Brain Cognition and Brain-inspired Intelligence Technology, 
+ * Center for Excellence in Brain Science and Intelligence Technology, Chinese Academy of Sciences, 320 
+ * Yue-Yang Road, Shanghai 200031, China.
  * 
- * 2 University of Chinese Academy of Sciences,19A Yu-Quan Road, Beijing 100049, China.
+ * 2 University of Chinese Academy of Sciences, 19A Yu-Quan Road, Beijing 100049, China.
+ * 
+ * 3 Department of Physics, School of Philosophy, Sciences and Letters of Ribeirão Preto, University of São Paulo, 
+ * Ribeirão Preto, São Paulo, Brazil.
+ * 
+ * 4 Faculty of Biomedical Engineering, Shenzhen University of Advanced Technology, Shenzhen, 518055, China.
+ * 
+ * 5 State Key Laboratory of Membrane Biology, Peking University School of Life Sciences, Beijing 100871, China.
+ * 
+ * 6 Research Center for Primate Neuromodulation and Neuroimaging, Shenzhen Institutes of Advanced Technology, 
+ * Chinese Academy of Sciences, Shenzhen 518055, China.
+ * 
+ * 7 Okinawa Institute of Science and Technology Graduate University, Biological Nonlinear Dynamics Data Science 
+ * Unit, Okinawa 904-0495, Japan.
+ * 
  *
- * 3 Department of Physics, School of Philosophy, Sciences and Letters of Ribeirão Preto, 
- * University of São Paulo, Ribeirão Preto, São Paulo, Brazil.
- *
- * 4 Research Center for Primate Neuromodulation and Neuroimaging, Shenzhen Institutes of 
- * Advanced Technology, Chinese Academy of Sciences, Shenzhen 518055, China.
- *
- * 5 Academy for Advanced Interdisciplinary Studies, School of Psychological and Cognitive 
- * Sciences, Peking University, Beijing 100871, China.
- *
- * 6 Okinawa Institute of Science and Technology Graduate University, Biological Nonlinear 
- * Dynamics Data Science Unit, Okinawa 904-0495, Japan.
- *
- * † These authors contributed equally to this work.
- * * Corresponding author. Email: my@ion.ac.cn
- *
+ * †These authors contributed equally to this work.
+ * *Corresponding author. Email: my@ion.ac.cn / antonior@usp.br
  *
  * This file provides the  model equations, auxiliary methods for loading parameters, 
  * and methods for solving the system of ODEs.
@@ -113,6 +116,8 @@ void Astrocyte::ConfigureAstrocyticVectors(){
     R2C2cAMP2.resize(N_comparts);
     R2C2cAMP4.resize(N_comparts);
     PKA.resize(N_comparts);
+    PDE4.resize(N_comparts);
+    PDE4A.resize(N_comparts);
 
     std::fill(Ca_i.begin(), Ca_i.end(), Ca_irest);
     std::fill(Ca_ER.begin(), Ca_ER.end(), Ca_ERrest);
@@ -142,6 +147,8 @@ void Astrocyte::ConfigureAstrocyticVectors(){
     std::fill(R2C2cAMP2.begin(), R2C2cAMP2.end(), R2C2cAMP2_rest);
     std::fill(R2C2cAMP4.begin(), R2C2cAMP4.end(), R2C2cAMP4_rest);
     std::fill(PKA.begin(), PKA.end(), PKA_rest);
+    std::fill(PDE4.begin(), PDE4.end(), PDE4_rest);
+    std::fill(PDE4A.begin(), PDE4A.end(), PDE4A_rest);
 
 
     // Resize stimuli vectors
@@ -342,11 +349,7 @@ std::vector <int> *_stim_comparts, std::vector <int> *N_stimulated){
             (*stim_comparts)[i_s] = &((*_stim_comparts)[2*aux_index]);
             aux_index += (*N_stimulated)[i_s];
         }
-        
-        //for(int i_s = 0; i_s < 12; i_s++){
-        //    std::cout << i_s << " " << (*_stim_comparts)[i_s] << ",";
-        //}
-        
+                
         in_file.close();
 
     }//end of the condition ensuring no problem in opening the file
@@ -571,17 +574,27 @@ double Astrocyte::dVdt(int i_c){
     return -1 / C_m * (J_NCX + J_NKA + J_Naleak + J_Kleak -2*J_IP3R + 2*J_SERCA - 2*J_CERleak);
 }
 
-double Astrocyte::dACGasdt(int i_c) {return k1_ACGas * AC[i_c] * GasA[i_c] - (k2_ACGas + k3_ACGas * ATP) * AC_Gas[i_c];}
-double Astrocyte::dGasAdt(int i_c) {return k1_GasA * D1R_DA_Gas[i_c] - k2_GasA * GasA[i_c];}
-double Astrocyte::dD1R_DA_Gasdt(int i_c) {return k1_D1R_DA_Gas * D1R_DA[i_c] * Gas[i_c] - (k2_D1R_DA_Gas + k3_D1R_DA_Gas) * D1R_DA_Gas[i_c];}
-double Astrocyte::dGasdt(int i_c) {return k1_Gas * GasA[i_c] - k2_Gas * D1R_DA[i_c] * Gas[i_c];}
-double Astrocyte::dD1R_DAdt(int i_c) {return k1_D1R_DA * D1R[i_c] * DA[i_c] - k2_D1R_DA * D1R_DA[i_c];}
-double Astrocyte::dAC_Gas_ATPdt(int i_c) {return k1_AC_Gas_ATP * AC_Gas[i_c] * ATP - k2_AC_Gas_ATP * AC_Gas_ATP[i_c];}
-double Astrocyte::dcAMPdt(int i_c) {return k1_cAMP * AC_Gas_ATP[i_c] - k2_cAMP * AC_Gas[i_c] * cAMP[i_c] - V_PDE * cAMP[i_c] / (cAMP[i_c] + kcat);}
-double Astrocyte::dR2C2dt(int i_c) {return k1_R2C2 * R2C2[i_c] * pow(cAMP[i_c], 2) - k2_R2C2 * R2C2cAMP2[i_c];}
-double Astrocyte::dR2C2cAMP2dt(int i_c) {return k1_R2C2cAMP2 * R2C2[i_c] * pow(cAMP[i_c], 2) + k2_R2C2cAMP2 * R2C2cAMP4[i_c] - k3_R2C2cAMP2 * R2C2cAMP2[i_c] * pow(cAMP[i_c], 2);}
-double Astrocyte::dR2C2cAMP4dt(int i_c) {return k1_R2C2cAMP4 * R2C2cAMP2[i_c] * pow(cAMP[i_c], 2) - (k2_R2C2cAMP4 + k3_R2C2cAMP4 * PKA[i_c]) * R2C2cAMP4[i_c];}
-double Astrocyte::dPKAdt(int i_c) { return k1_PKA * R2C2cAMP4[i_c] - k2_PKA * PKA[i_c] * R2cAMP4; }
+double Astrocyte::dACGasdt(int i_c) { return k1_ACGas * AC[i_c] * GasA[i_c] - (k2_ACGas + k3_ACGas * ATP) * AC_Gas[i_c] + k4_ACGas * AC_Gas_ATP[i_c]; }
+double Astrocyte::dGasAdt(int i_c) { return k1_GasA * D1R_DA_Gas[i_c] - k2_GasA * GasA[i_c]; }
+double Astrocyte::dD1R_DA_Gasdt(int i_c) { return k1_D1R_DA_Gas * D1R_DA[i_c] * Gas[i_c] - (k2_D1R_DA_Gas + k3_D1R_DA_Gas) * D1R_DA_Gas[i_c]; }
+double Astrocyte::dGasdt(int i_c) { return k1_Gas * GasA[i_c] - k2_Gas * D1R_DA[i_c] * Gas[i_c]; }
+double Astrocyte::dD1R_DAdt(int i_c) { return k1_D1R_DA * D1R[i_c] * DA[i_c] - k2_D1R_DA * D1R_DA[i_c] + k3_D1R_DA * D1R_DA_Gas[i_c]; }
+double Astrocyte::dAC_Gas_ATPdt(int i_c) { return k1_AC_Gas_ATP * AC_Gas[i_c] * ATP - k2_AC_Gas_ATP * AC_Gas_ATP[i_c] + k3_AC_Gas_ATP * cAMP[i_c] * AC_Gas[i_c]; }
+
+
+
+double Astrocyte::dcAMPdt(int i_c) {
+    return (k1_cAMP * AC_Gas_ATP[i_c] - k2_cAMP * AC_Gas[i_c] * cAMP[i_c] - 2 * kf_R2C2 * R2C2[i_c] * cAMP[i_c] * cAMP[i_c]
+        - 2 * kf_R2C2cAMP2 * R2C2cAMP2[i_c] * cAMP[i_c] * cAMP[i_c] + 2 * kb_R2C2 * R2C2cAMP2[i_c] + kb_R2C2cAMP4 * 2 * R2C2cAMP4[i_c]
+        - V_PDE * cAMP[i_c] / (cAMP[i_c] + kcat) - V_PDE4 * PDE4A[i_c] / (PDE4A[i_c] + kcat4) * cAMP[i_c] / (cAMP[i_c] + kcat5));
+}
+
+double Astrocyte::dR2C2dt(int i_c) { return k1_R2C2 * R2C2[i_c] * pow(cAMP[i_c], 2) - k2_R2C2 * R2C2cAMP2[i_c]; }
+double Astrocyte::dR2C2cAMP2dt(int i_c) { return k1_R2C2cAMP2 * R2C2[i_c] * pow(cAMP[i_c], 2) + k2_R2C2cAMP2 * R2C2cAMP4[i_c] - k3_R2C2cAMP2 * R2C2cAMP2[i_c] * pow(cAMP[i_c], 2) - kb_R2C2 * R2C2cAMP2[i_c]; }
+double Astrocyte::dR2C2cAMP4dt(int i_c) { return k1_R2C2cAMP4 * R2C2cAMP2[i_c] * pow(cAMP[i_c], 2) - k2_R2C2cAMP4 * R2C2cAMP4[i_c] + k2_PKA * PKA[i_c] * PKA[i_c] * R2cAMP4; }
+double Astrocyte::dPKAdt(int i_c) { return k1_PKA * R2C2cAMP4[i_c] - k2_PKA * PKA[i_c] * PKA[i_c] * R2cAMP4 - k_pep * PKA[i_c] - k_dgr * PKA[i_c] / (PKA[i_c] + k_degr); }
+
+double Astrocyte::dPDE4Adt(int i_c) { return k1_PDE4A * PDE4[i_c] * PKA[i_c] - k2_PDE4A * PDE4A[i_c]; }
 
 
 void Astrocyte::UpdateVariables(double dt){
@@ -618,6 +631,9 @@ void Astrocyte::UpdateVariables(double dt){
         R2C2cAMP2[i_c]  += dt * dR2C2cAMP2dt(i_c);
         R2C2cAMP4[i_c]  += dt * dR2C2cAMP4dt(i_c);
         PKA[i_c]        += dt * dPKAdt(i_c);
+        PDE4[i_c]       -= dt * dPDE4Adt(i_c);
+        PDE4A[i_c]      += dt * dPDE4Adt(i_c);
+
 
         CheckCaSignalInAstrocyte(i_c);
 
@@ -766,13 +782,11 @@ void Astrocyte::ChangeParameters(std::string parameter, std::string value){
     else if (parameter == "k3_R2C2cAMP2") { k3_R2C2cAMP2 = std::stod(value); }
     else if (parameter == "k1_R2C2cAMP4") { k1_R2C2cAMP4 = std::stod(value); }
     else if (parameter == "k2_R2C2cAMP4") { k2_R2C2cAMP4 = std::stod(value); }
-    else if (parameter == "k3_R2C2cAMP4") { k3_R2C2cAMP4 = std::stod(value); }
     else if (parameter == "R2cAMP4") { R2cAMP4 = std::stod(value); }
     else if (parameter == "k1_PKA") { k1_PKA = std::stod(value); }
     else if (parameter == "k2_PKA") { k2_PKA = std::stod(value); }
     else if (parameter == "k_PKA") { k_PKA = std::stod(value); }
     else if (parameter == "k1_D1R_DA") { k1_D1R_DA = std::stod(value); }
-    else if (parameter == "k3_R2C2cAMP4") { k3_R2C2cAMP4 = std::stod(value); }
     else if(parameter == "I_NKAmax"){I_NKAmax = std::stod(value);}
     else if(parameter == "K_NKAmN"){K_NKAmN = std::stod(value);}
     else if(parameter == "K_NKAmK"){K_NKAmK = std::stod(value);}
