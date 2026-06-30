@@ -1,6 +1,6 @@
 # Astroglia integrate sequential norepinephrine-dopamine signals to drive behavioral state transitions
  
-Sijia Wang<sup>1,2†</sup>, Shilin Fang<sup>1†</sup>, Thiago O. Bezerra<sup>3†</sup>, Zhiyuan Wang<sup>1,2</sup>, Xiaoou Wang<sup>1,2</sup>, Liang Wang<sup>4</sup>, Kui Wang<sup>1</sup>, Lijun Chen<sup>1,2</sup>, Funing Li<sup>1</sup>, Yuchen Gong<sup>1,2</sup>, Yongxin Yang<sup>1,2</sup>, Jiesi Feng<sup>5</sup>, Yu Zheng<sup>5</sup>, Yulong Li<sup>5</sup>, Jun Chu<sup>6</sup>, Gerald M. Pao<sup>7</sup>, Xu-fei Du<sup>1,2</sup>, Jiu-lin Du<sup>1,2</sup>, Antonio C. Roque<sup>3*</sup>, Yu Mu<sup>1,2*</sup>
+Sijia Wang<sup>1,2†</sup>, Shilin Fang<sup>1†</sup>, Thiago O. Bezerra<sup>3†</sup>, Zhiyuan Wang<sup>1,2</sup>, Xiaoou Wang<sup>1,2</sup>, Liang Wang<sup>4</sup>, Kui Wang<sup>1</sup>, Lijun Chen<sup>1,2</sup>, Funing Li<sup>1</sup>, Yuchen Gong<sup>1,2</sup>, Yongxin Yang<sup>1,2</sup>, Jiesi Feng<sup>5</sup>, Yu Zheng<sup>5</sup>, Yulong Li<sup>5</sup>, Jun Chu<sup>6</sup>, Gerald M. Pao<sup>7</sup>, Xu-fei Du<sup>1,2</sup>, Antonio C. Roque<sup>3*</sup>, Yu Mu<sup>1,2*</sup>
 
 
 Affiliations:
