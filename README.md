@@ -26,6 +26,29 @@ Unit, Okinawa 904-0495, Japan.
 <sup>†</sup> These authors contributed equally to this work.
 <sup>*</sup> Corresponding author. Email: my@ion.ac.cn / antonior@usp.br
 
+---
+
+# Quick Start
+
+The cAMP model was implemented in C++ and the code must be compiled before running the simulations. To compile the code, use the make files in the `makefiles` folder. For Windows OS use `makefile_w` and for Linux based OS use `makefile_l`. Before compiling the code, remove either the `_w` or `_l` suffixes and move the `makefile` to the `src` folder. After compilation, it will create a executable `RunModel`.
+
+## Running the Model and Analysis
+
+To run the model, execute `RunModel` created after compilation. The program will run the simulations configured in the input files (see the `Code Structure` section below for details.) Results will be saved in the `Output` folder. To plot the results, execute the `Analysis of astrocytic cAMP signaling dynamics.ipynb` notebook. The data provided in the `results` folder was obtained simulating the `NEDA_Example.txt` example input.
+
+## Development Environment
+
+This model was tested and compiled on both Linux and Windows environments using the following compiler configurations:
+
+| Operating System | Compiler | Tested Version |
+| :--- | :--- | :--- |
+| **Linux** (Ubuntu/Debian) | GCC (`g++`) | `9.4` |
+| **Windows 11** | MSVC (`cl`) | `19.44` |
+
+---
+
+# Code Structure
+
 The astrocyte cAMP model was implemented in C++. The codes are organized in four source files — `Astrocyte.cpp`, `Simulator.cpp`, `StimuliGenerator.cpp`, and `RunModel.cpp` and the corresponding header files (`Astrocyte.h`, `Simulator.h`, and `StimuliGenerator.h`).
 
 - **Astrocyte.cpp:** Model equations, auxiliary methods for loading parameters, and methods for solving the system of ODEs;
