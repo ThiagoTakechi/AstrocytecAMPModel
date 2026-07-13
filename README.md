@@ -90,7 +90,7 @@ The following entries are mandatory in every input file:
 - **N_comparts**: Number of compartments;
 
 - **N_comparts_connections**: Number of connections between compartments;
-- 
+ 
 - **output_file**: Output file name; 
 
 In this implementation:
